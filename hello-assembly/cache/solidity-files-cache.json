@@ -344,8 +344,8 @@
       }
     },
     "src/Contract.sol": {
-      "lastModificationDate": 1663653887620,
-      "contentHash": "0a4db02f64172ef6ba21d89f49444a92",
+      "lastModificationDate": 1663832143813,
+      "contentHash": "be525d64d748abebe4a2de43ba2cc4e9",
       "sourceName": "src/Contract.sol",
       "solcConfig": {
         "settings": {
@@ -376,8 +376,8 @@
       "imports": [],
       "versionRequirement": "^0.8.13",
       "artifacts": {
-        "Contract": {
-          "0.8.15+commit.e14f2714.Darwin.appleclang": "Contract.sol/Contract.json"
+        "GeeksForGeeks": {
+          "0.8.15+commit.e14f2714.Darwin.appleclang": "Contract.sol/GeeksForGeeks.json"
         }
       }
     },
@@ -500,6 +500,44 @@
       "artifacts": {
         "Setup": {
           "0.8.15+commit.e14f2714.Darwin.appleclang": "Setup.sol/Setup.json"
+        }
+      }
+    },
+    "src/testfallback.sol": {
+      "lastModificationDate": 1663838255229,
+      "contentHash": "be525d64d748abebe4a2de43ba2cc4e9",
+      "sourceName": "src/testfallback.sol",
+      "solcConfig": {
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "metadata": {
+            "bytecodeHash": "ipfs"
+          },
+          "outputSelection": {
+            "*": {
+              "": [
+                "ast"
+              ],
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ]
+            }
+          },
+          "evmVersion": "london",
+          "libraries": {}
+        }
+      },
+      "imports": [],
+      "versionRequirement": "^0.8.13",
+      "artifacts": {
+        "GeeksForGeeks": {
+          "0.8.15+commit.e14f2714.Darwin.appleclang": "testfallback.sol/GeeksForGeeks.json"
         }
       }
     },
