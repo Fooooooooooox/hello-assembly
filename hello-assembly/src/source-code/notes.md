@@ -247,7 +247,7 @@ label_0010:
 	0020    60    PUSH1 0x80
 	0022    60    PUSH1 0x40
 	0024    52    MSTORE
-	0025    34    CALLVALUE
+	0025    34    CALLVALUE 
 	0026    80    DUP1
 	0027    15    ISZERO
 	0028    61    PUSH2 0x0010
@@ -463,3 +463,32 @@ https://etherscan.io/opcode-tool
 
 查询opcode和其他技术规范：
 https://ethereum.github.io/yellowpaper/paper.pdf
+
+ida：
+是什么？
+
+Writing a disassembler is a tedious task. You have to decode the opcode, interpret the meaning of the operands and, finally, print the instruction correctly. Fortunately, you can count on IDA to provide modules with mapping executable, a colorful GUI, control flow graphs and so on.
+
+如何使用？
+我发现ida作者写了很多的博客关于如何使用：
+https://hex-rays.com/blog/ 
+
+关于如何增加module可以看这篇：https://www.hex-rays.com/products/ida/support/idadoc/536.shtml
+我们要加的module：https://github.com/crytic/ida-evm
+
+首先安装ida pro
+https://hex-rays.com/ida-free/
+
+如何增加plugin module？
+
+可以看这个：The IDA Way
+https://sark.readthedocs.io/en/latest/plugins/installation.html
+
+先装一个官方的sample module：highligther：
+目录：
+```shell
+cd $HOME/.idapro
+mkdir plugins
+mv /Users/foooox/Downloads/highlighter/ .
+```
+重启ida
