@@ -158,7 +158,13 @@ forge build之后可以在output中找到合约的bytecode
 
 将bytecode转换为opcode：https://ethervm.io/decompile
 
+这里的bytecode应该是合约的runtime（下次看看合约部署的过程：
+
+图中creation是创建合约，主要执行constructor函数、返回合约的runtime、payable检查。不同合约部署的时候会生成不一样的constructor）
+
 得到的结果：
+
+合约的runtime包含：selector、wrapper、function body 和metadata hash
 
 ```c++
 contract Contract {
@@ -181,13 +187,14 @@ label_0000:
 	0000    60  PUSH1 0x80 //（将0x80压入栈顶）
 	0002    60  PUSH1 0x40 //（将0x40压入栈顶）
 	0004    52  MSTORE //（把0x80存放在内存0x40处）现在栈是空的了
+    // 上面这三条一般被叫做free memory pointer
 	0005    34  CALLVALUE // callvalue会拿到mag.value存入栈顶
 	0006    80  DUP1 // dup 1复制一个到栈顶
 	0007    15  ISZERO // 判断栈顶是不是0（如果calldata不是空那就是1，如果calldata为空就为0） 所以这个是用来判断传入的calldata是不是空
-	0008    61  PUSH2 0x0010
-	000B    57  *JUMPI //jumpi是跳转指令 表示从栈中依次出栈两个值arg0和arg1 如果arg1的值为真则跳转到arg0处，否则不跳转
-    // 如果calldata为空：栈：0,0x0010, calldata ==》 不跳转
-    // 如果calldata不为空：栈：1, 0x0010, calldata ==》 跳转到label0x0010
+	0008    61  PUSH2 0x0010 //现在的栈： 0x0010, calldata == 0(bool值表示calldata是不是空的)，calldata
+	000B    57  *JUMPI //jumpi是跳转指令 表示从栈中依次出栈两个值destination	condition 如果condition的值为真则跳转到arg0处，否则不跳转
+    // 如果calldata为空：栈：0x0010, 0, calldata ==》 不跳转
+    // 如果calldata不为空：栈：0x0010, 1, calldata ==》 跳转到label0x0010
 	// Stack delta = +1
 	// Outputs[2]
 	// {
@@ -197,12 +204,14 @@ label_0000:
 	// Block ends with conditional jump to 0x0010, if !msg.value
 
 // 如果不跳转就继续：
+// 没有符合的，revert
 label_000C:
 	// Incoming jump from 0x000B, if not !msg.value
 	// Inputs[1] { @000F  memory[0x00:0x00] }
 	000C    60  PUSH1 0x00
 	000E    80  DUP1
-	000F    FD  *REVERT
+	000F    FD  *REVERT // REVERT接收两个参数：offset	length	
+    // 返回memory从offset开始长度为length的内容 这个功能是Byzantium硬分叉之后具有的，revert的时候可以返回一条信息
 	// Stack delta = +0
 	// Outputs[1] { @000F  revert(memory[0x00:0x00]); }
 	// Block terminates
@@ -218,9 +227,14 @@ label_0010:
 	0015    80  DUP1
 	0016    61  PUSH2 0x0020
 	0019    60  PUSH1 0x00 // 栈：0x00 0x0020 0x0156 0x0156 
-	001B    39  CODECOPY //复制当前的code到栈顶
-	001C    60  PUSH1 0x00
-	001E    F3  *RETURN
+	001B    39  CODECOPY //复制当前的code到内存 用了三个参数：destOffset	offset	length	
+    // 结果得到：memory[destOffset:destOffset+length] = address(this).code[offset:offset+length]
+    // 第三个参数是code的长度
+    // 第一个是栈的起始位置
+    // 第二个是code里目标函数的起始位置
+	001C    60  PUSH1 0x00 // 现在栈里面有两个东西：0x00，0x0156
+	001E    F3  *RETURN // return接收两个参数：offset length，	return memory[offset:offset+length]，从offset的位置开始返回内从中长度为length的内容 所以这里是返回了code
+    // 这里就是selector：
 	// Stack delta = -1
 	// Outputs[2]
 	// {
