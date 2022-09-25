@@ -503,6 +503,44 @@
         }
       }
     },
+    "src/tee.sol": {
+      "lastModificationDate": 1664071010389,
+      "contentHash": "ab9d081aa9a9265f86ff225e8ae7a842",
+      "sourceName": "src/tee.sol",
+      "solcConfig": {
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "metadata": {
+            "bytecodeHash": "ipfs"
+          },
+          "outputSelection": {
+            "*": {
+              "": [
+                "ast"
+              ],
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ]
+            }
+          },
+          "evmVersion": "london",
+          "libraries": {}
+        }
+      },
+      "imports": [],
+      "versionRequirement": "^0.8.13",
+      "artifacts": {
+        "Tee": {
+          "0.8.15+commit.e14f2714.Darwin.appleclang": "tee.sol/Tee.json"
+        }
+      }
+    },
     "src/testfallback.sol": {
       "lastModificationDate": 1663838255229,
       "contentHash": "be525d64d748abebe4a2de43ba2cc4e9",
